@@ -1,0 +1,93 @@
+services:
+  # Kilimall Backend
+  kilimall-backend:
+    build:
+      context: ./test-backend
+      dockerfile: Dockerfile
+    container_name: kilimall-backend
+    networks:
+      - my_network
+    environment:
+      - MONGO_URI=mongodb://kilimall-db:27017/kilimall
+      - PORT=3000
+      - BACKEND_NAME="kilimall"
+    restart: always
+
+  # Jumia Backend
+  jumia-backend:
+    build:
+      context: ./test-backend
+      dockerfile: Dockerfile
+    container_name: jumia-backend
+    networks:
+      - my_network
+    environment:
+      - MONGO_URI=mongodb://jumia-db:27017/jumia
+      - PORT=3001
+      - BACKEND_NAME="JUMIA"
+    restart: always
+
+  # Zeraki Backend
+  zeraki-backend:
+    build:
+      context: ./test-backend
+      dockerfile: Dockerfile
+    container_name: zeraki-backend
+    networks:
+      - my_network
+    environment:
+      - MONGO_URI=mongodb://zeraki-db:27017/zeraki
+      - PORT=3002
+      - BACKEND_NAME="ZERAKI"
+    restart: always
+
+  # MongoDB for Kilimall
+  kilimall-db:
+    image: mongo:latest
+    container_name: kilimall-db
+    networks:
+      - my_network
+    volumes:
+      - kilimall_data:/data/db
+    restart: always
+
+  # MongoDB for Jumia
+  jumia-db:
+    image: mongo:latest
+    container_name: jumia-db
+    networks:
+      - my_network
+    volumes:
+      - jumia_data:/data/db
+    restart: always
+
+  # MongoDB for Zeraki
+  zeraki-db:
+    image: mongo:latest
+    container_name: zeraki-db
+    networks:
+      - my_network
+    volumes:
+      - zeraki_data:/data/db
+    restart: always
+
+  # NGINX Reverse Proxy
+  nginx:
+    image: nginx:stable-alpine3.20-perl
+    container_name: nginx-proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "3000:3000" # Expose only NGINX
+    networks:
+      - my_network
+    restart: always
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  kilimall_data:
+  jumia_data:
+  zeraki_data:

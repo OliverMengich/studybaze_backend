@@ -1,0 +1,94 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Admin {
+  email: String!
+  id: String!
+  name: String!
+  password: String!
+  profile_image: String
+}
+
+type AuthPayload {
+  access_token: String!
+  email: String!
+  id: String!
+  name: String!
+  picture: String
+  refresh_token: String!
+}
+
+input CreateAdminDto {
+  email: String!
+  name: String!
+  password: String!
+  profile_image: String!
+}
+
+input CreateUserDto {
+  email: String!
+  name: String!
+  password: String!
+  profile_image: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Document {
+  category: String!
+  createdAt: DateTime!
+  document_path: String!
+  downloadsCount: Float!
+  id: String!
+  pages: Float!
+  preview_path: String!
+  price: Float!
+  rating: Float!
+  thumbnail_image: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type Mutation {
+  deleteDocument(id: String!): Document!
+  loginAdmin(email: String!, password: String!): AuthPayload
+  loginUser(email: String!, password: String!): AuthPayload
+  purchaseDocument(id: String!): Document!
+  refreshTokenAdmin(refresh_token: String!): AuthPayload
+  refreshTokenUser(refresh_token: String!): AuthPayload
+  registerAdmin(createAdminDto: CreateAdminDto!): AuthPayload
+  registerUser(createUserDto: CreateUserDto!): AuthPayload
+  uploadDocument(body: UploadDocumentDto!): Document!
+}
+
+type Query {
+  getAdmin(id: String!): Admin!
+  getAllUsers: [User!]
+  getDocumentById(id: String!): Document
+  getDocuments: [Document!]!
+  getUser: User
+  getUserByIdByAdmin(id: String!): User
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UploadDocumentDto {
+  categoryId: String!
+  document: Upload!
+  noOfPagesToShow: Float!
+  price: Float!
+  title: String!
+}
+
+type User {
+  email: String!
+  id: String!
+  name: String!
+  password: String!
+  profile_image: String
+}
